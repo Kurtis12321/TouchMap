@@ -1,0 +1,13 @@
+define S worldspawn 
+define H monster monster_demon_hellknight
+
+##########
+#    #   #
+# S  #  H#
+#    # H #
+#    . H #
+#    #   #
+#    #HH #
+#    # H #
+#    #   #
+##########
