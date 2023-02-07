@@ -33,6 +33,7 @@ pointer_name = "cross"  # the image name used to mark cursor position on the map
 wall_image_name = "wall"
 door_image_name = "door"
 hellknight_image_name = "hellknight"
+tick_image_name = "tick"
 spawn_image_name = "spawn"
 
 next_tile = wall_t
@@ -66,6 +67,9 @@ class button:
 
     def to_hellknight(self):  # changes tile to hellknight
         self._tile.set_images(private_map(hellknight_image_name, cell_size))
+
+    def to_tick(self):  # changes tile to tick
+        self._tile.set_images(private_map(tick_image_name, cell_size))
 
     def to_light(self):  # changes tile to light
         self._tile.set_images(private_map("torch", cell_size))
@@ -290,6 +294,7 @@ def add_xaxis(line, y, ypos):
             " ": b.to_blank,
             "S": b.to_spawn,
             "H": b.to_hellknight,
+            "T": b.to_tick,
             "L": b.to_light,
 
         }
@@ -419,6 +424,9 @@ def assets():
         touchgui.image_tile(private_map(hellknight_image_name, btn_size),
                             touchgui.posX(0.9), touchgui.posY(0.805),
                             btn_size, btn_size, hellknight),
+        touchgui.image_tile(private_map(tick_image_name, btn_size),
+                            touchgui.posX(0.9), touchgui.posY(0.740),
+                            btn_size, btn_size, tick),
         touchgui.image_tile(private_map("torch", btn_size),
                             touchgui.posX(0.95), touchgui.posY(0.805),
                             btn_size, btn_size, light),
@@ -460,6 +468,14 @@ def hellknight(name, tap):
     if tap == 1:
         print("hellknight created", name, tap)
         next_tile = hell_t
+
+
+def tick(name, tap):
+    global next_tile
+    pygame.display.update()
+    if tap == 1:
+        print("tick created", name, tap)
+        next_tile = tick_t
 
 
 # places light
@@ -602,6 +618,15 @@ def create_hellknight(button, x, y, tap):
     next_tile = hell_t
 
 
+# creates a tick
+def create_tick(button, x, y, tap):
+    global next_tile, cell_array
+    button.to_tick()
+    include_asset('T', "monster monster_demon_tick")
+    cell_array.set_contents(x + xoffset, y + yoffset, "T")
+    next_tile = tick_t
+
+
 # creates a light
 def create_light(button, x, y, tap):
     global next_tile, cell_array
@@ -648,6 +673,7 @@ function_create = {blank_t: create_blank,
                    wall_t: create_wall,
                    door_t: create_door,
                    hell_t: create_hellknight,
+                   tick_t: create_tick,
                    light_t: create_light,
                    delete_t: delete_button,
                    room_t: create_room,
@@ -709,6 +735,8 @@ def get_button(i, j, x, y, size):
             b.to_door()
         elif content == "H":
             b.to_hellknight()
+        elif content == "T":
+            b.to_tick()
         elif content == "L":
             b.to_light()
         elif content == "S":
