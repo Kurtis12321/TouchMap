@@ -95,9 +95,10 @@ class button:
 # this function will get the following room number
 def get_next_room():
     global rooms_available, next_room
-    if rooms_available == []:
-        if next_room > 9:
-            room = str(next_room + ord('a') - 10)
+    if not rooms_available:
+        if next_room > max_rooms:
+            # there are no more rooms available
+            return None
         else:
             room = str(next_room)
         next_room += 1
@@ -652,6 +653,8 @@ def create_room(button, x, y, tap):
         return
     num_rooms = num_rooms + 1
     room = get_next_room()
+    if room is None:
+        return
     button.to_room(room)
     include_asset(room, "room " + room)
     cell_array.set_contents(x + xoffset, y + yoffset, room)
